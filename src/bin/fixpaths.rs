@@ -1,0 +1,60 @@
+use getopt::prelude::*;
+use realpath::realpaths;
+use std::{env, io};
+
+program::main!("fixpaths");
+
+fn usage_line() -> String {
+    format!(
+        "Usage: {} [-h] [-e VAR] [string ...]",
+        program::name("fixpaths")
+    )
+}
+
+fn print_usage() -> program::Result {
+    println!("{}", usage_line());
+    println!("  -e VAR  operate on the value of environment variable VAR");
+    println!("  -h      display this help");
+    Ok(0)
+}
+
+fn program() -> program::Result {
+    let mut args = program::args();
+    let mut opts = Parser::new(&args, "e:h");
+
+    let mut pathss: Vec<String> = Vec::new();
+    loop {
+        match opts.next().transpose()? {
+            None => break,
+            Some(opt) => match opt {
+                Opt('e', Some(key)) => match env::var_os(&key) {
+                    None => {
+                        return Err(io::Error::new(
+                            io::ErrorKind::InvalidData,
+                            format!("{} not set", key),
+                        )
+                        .into());
+                    }
+                    Some(value) => pathss.push(value.to_string_lossy().into_owned()),
+                },
+                Opt('h', None) => return print_usage(),
+                _ => unreachable!(),
+            },
+        }
+    }
+
+    pathss.append(args.split_off(opts.index()).as_mut());
+
+    if pathss.is_empty() {
+        match env::var_os("PATH") {
+            None => return Err(io::Error::new(io::ErrorKind::InvalidData, "PATH not set").into()),
+            Some(value) => pathss.push(value.to_string_lossy().into_owned()),
+        }
+    }
+
+    for paths in pathss {
+        println!("{}", realpaths(&paths)?.to_string_lossy());
+    }
+
+    Ok(0)
+}
