@@ -1,4 +1,2 @@
-/*.iml
-/.idea/
-/target
-Cargo.lock
+/Cargo.lock
+/target/
