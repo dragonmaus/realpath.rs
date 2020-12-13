@@ -11,11 +11,11 @@ fn usage_line() -> String {
     )
 }
 
-fn print_usage() -> program::Result {
+fn print_usage() {
     println!("{}", usage_line());
     println!("  -e VAR  operate on the value of environment variable VAR");
+    println!();
     println!("  -h      display this help");
-    Ok(0)
 }
 
 fn program() -> program::Result {
@@ -37,7 +37,10 @@ fn program() -> program::Result {
                     }
                     Some(value) => pathss.push(value.to_string_lossy().into_owned()),
                 },
-                Opt('h', None) => return print_usage(),
+                Opt('h', None) => {
+                    print_usage();
+                    return Ok(0);
+                }
                 _ => unreachable!(),
             },
         }

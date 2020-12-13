@@ -7,11 +7,11 @@ fn usage_line() -> String {
     format!("Usage: {} [-0h] path [path ...]", program::name("realpath"))
 }
 
-fn print_usage() -> program::Result {
+fn print_usage() {
     println!("{}", usage_line());
     println!("  -0   terminate output lines with NUL, not newline");
+    println!();
     println!("  -h   display this help");
-    Ok(0)
 }
 
 fn program() -> program::Result {
@@ -25,7 +25,10 @@ fn program() -> program::Result {
             None => break,
             Some(opt) => match opt {
                 Opt('0', None) => eol = '\0',
-                Opt('h', None) => return print_usage(),
+                Opt('h', None) => {
+                    print_usage();
+                    return Ok(0);
+                }
                 _ => unreachable!(),
             },
         }
