@@ -1,26 +1,19 @@
-use getopt::prelude::*;
+use getopt::Opt;
 use realpath::realpaths;
 use std::{env, io};
 
 program::main!("fixpaths");
 
-fn usage_line() -> String {
-    format!(
-        "Usage: {} [-h] [-e VAR] [string ...]",
-        program::name("fixpaths")
-    )
-}
-
-fn print_usage() {
-    println!("{}", usage_line());
+fn print_usage(program_name: &str) {
+    println!("Usage: {} [-h] [-e VAR] [string ...]", program_name);
     println!("  -e VAR  operate on the value of environment variable VAR");
     println!();
     println!("  -h      display this help");
 }
 
-fn program() -> program::Result {
+fn program(name: &str) -> program::Result {
     let mut args = program::args();
-    let mut opts = Parser::new(&args, "e:h");
+    let mut opts = getopt::Parser::new(&args, "e:h");
 
     let mut pathss: Vec<String> = Vec::new();
     loop {
@@ -38,7 +31,7 @@ fn program() -> program::Result {
                     Some(value) => pathss.push(value.to_string_lossy().into_owned()),
                 },
                 Opt('h', None) => {
-                    print_usage();
+                    print_usage(name);
                     return Ok(0);
                 }
                 _ => unreachable!(),

@@ -1,22 +1,18 @@
-use getopt::prelude::*;
+use getopt::Opt;
 use realpath::realpath;
 
 program::main!("realpath");
 
-fn usage_line() -> String {
-    format!("Usage: {} [-0h] path [path ...]", program::name("realpath"))
-}
-
-fn print_usage() {
-    println!("{}", usage_line());
+fn print_usage(program_name: &str) {
+    println!("Usage: {} [-0h] path [path ...]", program_name);
     println!("  -0   terminate output lines with NUL, not newline");
     println!();
     println!("  -h   display this help");
 }
 
-fn program() -> program::Result {
+fn program(name: &str) -> program::Result {
     let mut args = program::args();
-    let mut opts = Parser::new(&args, "0h");
+    let mut opts = getopt::Parser::new(&args, "0h");
 
     let mut eol = '\n';
 
@@ -26,7 +22,7 @@ fn program() -> program::Result {
             Some(opt) => match opt {
                 Opt('0', None) => eol = '\0',
                 Opt('h', None) => {
-                    print_usage();
+                    print_usage(name);
                     return Ok(0);
                 }
                 _ => unreachable!(),
