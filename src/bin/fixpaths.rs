@@ -27,13 +27,13 @@ fn program(name: &str) -> program::Result {
                             format!("{} not set", key),
                         )
                         .into());
-                    }
+                    },
                     Some(value) => pathss.push(value.to_string_lossy().into_owned()),
                 },
                 Opt('h', None) => {
                     print_usage(name);
                     return Ok(0);
-                }
+                },
                 _ => unreachable!(),
             },
         }

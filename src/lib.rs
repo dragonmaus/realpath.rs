@@ -17,7 +17,7 @@ pub fn realpath<P: AsRef<Path>>(path: P) -> io::Result<PathBuf> {
                 error.kind(),
                 format!("error parsing path '{}': {}", path.to_string_lossy(), error),
             ));
-        }
+        },
         Ok(path) => path,
     };
     let mut new_path = PathBuf::new();
@@ -32,7 +32,7 @@ pub fn realpath<P: AsRef<Path>>(path: P) -> io::Result<PathBuf> {
                     new_path.push(r"\\");
                     new_path.push(server);
                     new_path.push(share);
-                }
+                },
             },
             _ => new_path.push(component.as_os_str()),
         }
