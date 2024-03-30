@@ -1,3 +1,6 @@
+extern crate getopt;
+extern crate realpath;
+
 use getopt::Opt;
 use realpath::realpath;
 

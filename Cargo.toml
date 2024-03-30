@@ -1,8 +1,9 @@
 [package]
 name = "realpath"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["David Wildasin <dragonmaus@posteo.net>"]
-edition = "2021"
+edition = "2018"
+rust-version = "1.33.0"
 description = "Path resolver library and utilities"
 repository = "https://git.dragonma.us/rust/realpath"
 license = "BSD-3-Clause-Clear"
@@ -11,6 +12,5 @@ publish = false
 
 [dependencies]
 getopt = "1"
-
 [dependencies.program]
 git = "git://git.dragonma.us/rust/program"
